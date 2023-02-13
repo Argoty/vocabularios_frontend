@@ -18,12 +18,12 @@
     <v-spacer></v-spacer>
 
     <v-btn
-      href="https://github.com/vuetifyjs/vuetify/releases/latest"
+      href="https://github.com/JaxisArty/vocabularios_frontend"
       target="_blank"
       text
     >
-      <span class="mr-2">Latest Release</span>
-      <v-icon>mdi-open-in-new</v-icon>
+      <span class="mr-2">Ultima actualizacion</span>
+      <v-icon>mdi-github</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
