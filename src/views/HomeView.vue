@@ -16,7 +16,7 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="text-subtitle-2 mb-1">
-                {{ vocabulario.nombre }}
+                {{ capitalizeFirstLetter(vocabulario.nombre) }}
               </v-list-item-title>
               <v-list-item-subtitle
                 >NÚMERO: {{ vocabulario.numero }}</v-list-item-subtitle
@@ -52,14 +52,11 @@
       </v-col>
     </v-row>
     <v-row>
-      <router-link
-      to="/admin/vocabularios"
-      class="no-underline"
-    >
-      <v-btn rounded color="blue lighten-5" class="px-3">
-        ADMIN <v-icon class="ml-1">mdi-eye</v-icon></v-btn
-      >
-    </router-link>
+      <router-link to="/admin/vocabularios" class="no-underline">
+        <v-btn rounded color="blue lighten-5" class="px-3">
+          ADMIN <v-icon class="ml-1">mdi-eye</v-icon></v-btn
+        >
+      </router-link>
     </v-row>
   </v-container>
 </template>
@@ -91,13 +88,24 @@ export default {
       await axios
         .get("/vocabularios/info")
         .then((response) => {
-          this.vocabularios = response.data;
+          let vocab_data = response.data;
+          vocab_data.sort((a, b) => a.numero - b.numero); // Ordenar array segun numero
+
+          this.vocabularios = vocab_data;
         })
         .catch((err) => {
-          this.$store.commit("setSnackbar", { status: true, message: err, type: "error" });
+          this.$store.commit("setSnackbar", {
+            status: true,
+            message: err,
+            type: "error",
+          });
         });
 
       this.$store.commit("setIsLoading", false);
+    },
+
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.toLowerCase().substr(1);
     },
   },
 };

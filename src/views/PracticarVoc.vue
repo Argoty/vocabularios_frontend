@@ -121,7 +121,10 @@ export default {
       await axios
         .get(`/vocabularios/${id_vocabulario}`)
         .then((response) => {
-          this.data = response.data;
+          let data_palabras = response.data;
+          data_palabras.sort(() => Math.random() - 0.5);
+
+          this.data = data_palabras
 
           // let errores = {};
 
@@ -180,6 +183,9 @@ export default {
       this.errores = {};
       this.palabras_model = {};
       this.practica_validada = false;
+
+
+      this.data.sort(() => Math.random() - 0.5);
     },
 
     ponerError(message) {

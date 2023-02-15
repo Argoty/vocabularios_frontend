@@ -200,7 +200,11 @@ export default {
       await axios
         .get("/vocabularios/info")
         .then((response) => {
-          this.vocabularios_data = response.data;
+          let vocab_data = response.data;
+          vocab_data.sort((a, b) => a.numero - b.numero); // Ordenar array segun numero
+          vocab_data.forEach(v => v.nombre = this.capitalizeFirstLetter(v.nombre))
+          
+          this.vocabularios_data = vocab_data;
         })
         .catch((err) => {
           this.$store.commit("setSnackbar", {
@@ -272,6 +276,10 @@ export default {
       };
 
       this.$store.commit("setIsLoading", false);
+    },
+
+    capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.toLowerCase().substr(1);
     },
   },
 };
