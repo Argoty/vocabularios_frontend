@@ -39,7 +39,6 @@
                 color="success"
                 class="mr-1"
                 dark
-                title="Actualizar Palabra"
                 rounded
                 small
                 v-bind="attrs"
@@ -59,7 +58,6 @@
               <v-btn
                 color="red accent-2"
                 dark
-                title="Eliminar Palabra"
                 class="mr-1"
                 rounded
                 small

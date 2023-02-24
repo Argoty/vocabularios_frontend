@@ -40,15 +40,19 @@
           v-if="palabraEditar.id"
           @click="$emit('cerrar')"
         >
-          Cerrar <v-icon>mdi-close</v-icon>
+          <span v-if="showText">Cerrar</span>
+          <v-icon :large="!showText">mdi-close</v-icon>
         </v-btn>
 
         <v-btn color="primary" @click="reset" dark>
-          Vaciar form <v-icon>mdi-restart</v-icon></v-btn
+          <span v-if="showText">Vaciar form</span>
+          <v-icon :large="!showText">mdi-restart</v-icon></v-btn
         >
         <v-btn color="success" type="submit" :disabled="!valid">
-          {{ !palabraEditar.id ? "Agregar Palabra" : "Editar" }}
-          <v-icon>{{
+          <span v-if="showText">{{
+            !palabraEditar.id ? "Agregar Palabra" : "Editar"
+          }}</span>
+          <v-icon :large="!showText">{{
             !palabraEditar.id ? "mdi-plus" : "mdi-update"
           }}</v-icon>
         </v-btn>
@@ -62,10 +66,24 @@ export default {
   props: {
     palabraEditar: Object,
   },
+
+  computed: {
+    breakpoint() {
+      return this.$vuetify.breakpoint.width;
+    },
+  },
+
   watch: {
     palabraEditar(value) {
       if (value.id) {
         this.palabra_form = { ...value };
+      }
+    },
+    breakpoint(val) {
+      if (val < 700) {
+        this.showText = false;
+      } else {
+        this.showText = true;
       }
     },
   },
@@ -79,6 +97,8 @@ export default {
         palabra: [(v) => !!v || "La palabra en ingles es requerida"],
         traduccion: [(v) => !!v || "La traducción en español es requerida"],
       },
+
+      showText: true,
     };
   },
   created() {
@@ -100,3 +120,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+span {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  span {
+    display: block;
+  }
+}
+</style>

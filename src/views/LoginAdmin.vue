@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <v-container>
     <v-row class="justify-center">
       <v-col cols="12" sm="9" md="7">
@@ -11,14 +11,14 @@
             <v-card-text>
               <v-text-field
                 color="primary"
-                label="Nombre de usuario"
-                hint="Ejemplo: usuario"
-                placeholder="Escribe el nombre de usuario admin"
+                label="Email de usuario"
+                hint="Ejemplo: usuario@gmail.com"
+                placeholder="Escribe el email del admin"
                 prepend-icon="mdi-account"
-                v-model="form.username"
+                v-model="form.email"
                 clearable
                 required
-                :rules="formRules.username"
+                :rules="formRules.email"
               >
               </v-text-field>
 
@@ -57,21 +57,28 @@
 </template>
 
 <script>
-import axios from "axios";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default {
   name: "LoginAdmin",
   data() {
     return {
       form: {
-        username: "",
-        password: ""
+        email: "",
+        password: "",
       },
       valid: false,
       see_password: false,
 
       formRules: {
-        username: [(v) => !!v || "El nombre de usuario admin es requerido"],
+        email: [
+          (v) => !!v || "El email admin es requerido",
+          (v) =>
+            /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/.test(
+              v
+            ) || "El email debe ser valido",
+        ],
         password: [(v) => !!v || "La contraseña admin es requerida"],
       },
     };
@@ -88,34 +95,45 @@ export default {
     async submitLogin() {
       this.$store.commit("setIsLoading", true);
 
-      // axios.defaults.headers.common["Authorization"] = "";
-      // localStorage.removeItem("token");
-
-      const form = { 
-        username: this.form.username,
-        password: this.form.password
+      const form = {
+        email: this.form.email,
+        password: this.form.password,
       };
 
-
-      await axios
-        .post("/usuarios/login", form)
-        .then((response) => {
-          console.log(response);
-
-          this.form = {};
-          this.$refs.form.resetValidation();
-        })
-        .catch((err) => {
-          console.log(err);
-          this.$store.commit("setSnackbar", {
-            status: true,
-            message: err,
-            type: "error",
-          });
+      try {
+        await signInWithEmailAndPassword(auth, form.email, form.password);
+      } catch (error) {
+        let mensajeError;
+        switch (error.code) {
+          case "auth/user-not-found":
+            mensajeError = "Usuario no encontrado";
+            break;
+          case "auth/wrong-password":
+            mensajeError = "Contraseña incorrecta";
+            break;
+        }
+        this.$store.commit("setSnackbar", {
+          status: true,
+          message: mensajeError,
+          type: "error",
         });
 
+        this.$store.commit("setIsLoading", false);
+        return;
+      }
+
+      const user = auth.currentUser.email;
+      this.$store.commit("setUser", { user, stateAuth: true });
+      localStorage.setItem("user", user);
+
       this.$store.commit("setIsLoading", false);
+      this.$store.commit("setSnackbar", {
+        status: true,
+        message: "Login exitosamente del usuario " + user,
+        type: "info",
+      });
+      this.$router.push("/admin/vocabularios");
     },
   },
 };
-</script> -->
+</script>

@@ -31,7 +31,6 @@
                 color="success"
                 class="mr-1"
                 dark
-                title="Actualizar Vocabulario"
                 rounded
                 small
                 v-bind="attrs"
@@ -51,7 +50,6 @@
               <v-btn
                 color="red accent-2"
                 dark
-                title="Eliminar Vocabulario"
                 class="mr-1"
                 rounded
                 small
@@ -80,15 +78,7 @@
                 }"
                 class="no-underline"
               >
-                <v-btn
-                  color="blue"
-                  dark
-                  title="Añadir Palabras"
-                  rounded
-                  small
-                  v-bind="attrs"
-                  v-on="on"
-                >
+                <v-btn color="blue" dark rounded small v-bind="attrs" v-on="on">
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
               </router-link>
@@ -98,6 +88,18 @@
         </template>
       </v-data-table>
     </v-card>
+
+    <v-row class="mt-2 ml-2">
+      <v-btn
+        rounded
+        color="red darken-1"
+        dark
+        class="px-3"
+        @click="cerrarSesion()"
+      >
+        CERRAR SESIÓN <v-icon class="ml-1">mdi-logout</v-icon></v-btn
+      >
+    </v-row>
 
     <DialogoEliminar
       :dialogo_obj="dialogoEliminar"
@@ -125,6 +127,9 @@
 import axios from "axios";
 import FormVocab from "@/components/FormVocab.vue";
 import DialogoEliminar from "@/components/DialogoEliminar.vue";
+
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 export default {
   name: "AdminVocab",
@@ -202,8 +207,10 @@ export default {
         .then((response) => {
           let vocab_data = response.data;
           vocab_data.sort((a, b) => a.numero - b.numero); // Ordenar array segun numero
-          vocab_data.forEach(v => v.nombre = this.capitalizeFirstLetter(v.nombre))
-          
+          vocab_data.forEach(
+            (v) => (v.nombre = this.capitalizeFirstLetter(v.nombre))
+          );
+
           this.vocabularios_data = vocab_data;
         })
         .catch((err) => {
@@ -280,6 +287,22 @@ export default {
 
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.toLowerCase().substr(1);
+    },
+
+    async cerrarSesion() {
+      this.$store.commit("setIsLoading", true);
+
+      await signOut(auth);
+      this.$store.commit("setUser", { user: null, stateAuth: false });
+      localStorage.removeItem("user");
+
+      this.$store.commit("setIsLoading", false);
+      this.$store.commit("setSnackbar", {
+        status: true,
+        message: "Se acaba de cerrar sesión del admin",
+        type: "info",
+      });
+      this.$router.push("/admin/login");
     },
   },
 };

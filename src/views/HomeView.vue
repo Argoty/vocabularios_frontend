@@ -51,13 +51,6 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
-      <router-link to="/admin/vocabularios" class="no-underline">
-        <v-btn rounded color="blue lighten-5" class="px-3">
-          ADMIN <v-icon class="ml-1">mdi-eye</v-icon></v-btn
-        >
-      </router-link>
-    </v-row>
   </v-container>
 </template>
 
