@@ -16,12 +16,18 @@
 
     <v-spacer></v-spacer>
 
+    <router-link to="/admin/vocabularios" class="no-underline">
+      <v-btn text>
+        <span class="mr-1" v-if="showText">Admin</span><v-icon :large="!showText">mdi-cog</v-icon></v-btn
+      >
+    </router-link>
+
     <v-btn
       href="https://github.com/JaxisArty/vocabularios_frontend"
       target="_blank"
       text
     >
-      <span class="mr-2" v-if="showText">Ultima actualizacion</span>
+      <span class="mr-1" v-if="showText">Ultima actualizacion</span>
       <v-icon :large="!showText">mdi-github</v-icon>
     </v-btn>
   </v-app-bar>
@@ -32,23 +38,23 @@ export default {
   name: "Navbar",
   data() {
     return {
-      showText: true
-    }
+      showText: true,
+    };
   },
   computed: {
     breakpoint() {
-      return this.$vuetify.breakpoint.width
-    }
+      return this.$vuetify.breakpoint.width;
+    },
   },
   watch: {
     breakpoint(val) {
-      if (val < 700) {
-        this.showText = false
+      if (val < 900) {
+        this.showText = false;
       } else {
-        this.showText = true
+        this.showText = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -67,7 +73,7 @@ span {
   display: none;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 900px) {
   span {
     display: block;
   }

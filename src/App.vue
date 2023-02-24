@@ -28,6 +28,7 @@ import Navbar from "./views/Navbar.vue";
 import Snackbar from "./components/Snackbar.vue";
 import Footer from "./components/Footer.vue";
 
+
 export default {
   name: "App",
   components: {
@@ -40,6 +41,10 @@ export default {
     //
   }),
 
+  created() {
+    this.$store.commit("initializeStore");
+  },
+  
   
 };
 </script>
