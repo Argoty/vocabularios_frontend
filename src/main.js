@@ -5,7 +5,6 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import axios from 'axios';
 
-
 axios.defaults.baseURL = "https://vocabularios-1-x3183952.deta.app/"
 
 Vue.config.productionTip = false
