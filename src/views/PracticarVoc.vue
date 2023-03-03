@@ -154,6 +154,8 @@ export default {
       });
 
       Object.keys(palabras_traducidas).forEach((k) => {
+        resultados[k] = resultados[k] ? resultados[k].toLowerCase().trim() : ""; 
+
         if (resultados[k] != palabras_traducidas[k]) {
           algun_error = true;
 
