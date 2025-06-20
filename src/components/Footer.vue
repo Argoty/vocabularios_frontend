@@ -29,7 +29,7 @@
         ingles, hecha con Las tecnologias Vue Js, Vuetify y usando una API
         propia hecha en fastapi:
         <a
-          href="https://vocabularios-1-x3183952.deta.app/docs"
+          href="https://vocabulariosingles-fastapi.onrender.com/docs"
           target="_BLANK"
           class="white--text"
           >Vocabularios Argoty</a
